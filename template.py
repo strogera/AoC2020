@@ -1,16 +1,13 @@
 def partOne():
     with open("input.txt", "r") as inputFile:
         for line in inputFile:
-            continue
+            #elems=line.strip().split()
 
 
 def partTwo():
-    with open("input.txt", "r") as inputFile:
-        for line in inputFile:
-            continue
+    return 'unknown'
 
-
-print("Answer for part one: ")
-partOne()
-print("Answer for part two: ")
-partTwo()
+print("Answer for part 1: ")
+print(partOne())
+print("Answer for part 2: ")
+print(partTwo())
