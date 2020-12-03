@@ -3,15 +3,14 @@ def partOne(stepHorizontal=3, stepVertical=1, startx=0, starty=0):
         info=[]
         for line in inputFile:
             info.append(line.strip())
-        x=startx + stepHorizontal
-        y=starty + stepVertical
+        x=startx 
+        y=starty
         trees=0
         while y<len(info):
-            x=x%len(info[0])
             if info[y][x] == '#':
                 trees+=1
             y+=stepVertical
-            x+=stepHorizontal
+            x=(x+stepHorizontal)%len(info[0])
         return trees
 
 
