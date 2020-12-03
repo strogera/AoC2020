@@ -7,8 +7,7 @@ def partOne(stepHorizontal=3, stepVertical=1, startx=0, starty=0):
         y=starty + stepVertical
         trees=0
         while y<len(info):
-            if x>=len(info[0]):
-                x=x%len(info[0])
+            x=x%len(info[0])
             if info[y][x] == '#':
                 trees+=1
             y+=stepVertical
