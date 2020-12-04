@@ -1,4 +1,3 @@
-
 essentialFields=['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
 
 def isValidPasswordPart1(password):
@@ -35,12 +34,8 @@ def isValidPasswordPart2(password):
                 else:
                     return False
             elif password[i] == 'hcl':
-                if password[i+1][0] != '#':
+                if password[i+1][0] != '#' or not password[i+1][1:].isalnum():
                     return False
-                else:
-                    for c in password[i+1][1:]:
-                        if (ord(c)< ord('0') or ord(c)>ord('9')) and (ord(c)<ord('a') or ord(c) > ord('f')):
-                            return False
             elif password[i] == 'ecl':
                 colors=['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
                 if not (password[i+1] in colors):
