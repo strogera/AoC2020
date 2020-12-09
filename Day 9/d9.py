@@ -1,22 +1,24 @@
-def getSumCouples(l):
-    summs=[]
-    for i in range(len(l)):
-        for j in range(i, len(l)):
-            summs.append(l[i]+l[j])
-    return summs
+def getNumNoSumPair(data, preamble):
+    queue=data[:preamble]
+
+    for x in data[preamble:]:
+        for q in queue:
+            sumExists=False
+
+            if x-q in queue:
+                sumExists=True
+                break
+
+        if not sumExists:
+            return x
+
+        queue.pop(0)
+        queue.append(x)
 
 def partOne(preamble=25):
     with open("input.txt", "r") as inputFile:
         data=[int (x) for x in inputFile.readlines()]
-        for i in range(len(data)):
-            if i < preamble:
-                continue
-            
-            sumCouples=getSumCouples(data[i-preamble:i])
-            num=data[i]
-
-            if num not in sumCouples:
-                return num
+        return getNumNoSumPair(data, preamble)
 
 def getSubsetSumsTo(l, num):
     numsQueue=[]
