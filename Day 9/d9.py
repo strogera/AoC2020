@@ -11,30 +11,37 @@ def partOne(preamble=25):
         for i in range(len(data)):
             if i < preamble:
                 continue
+            
             sumCouples=getSumCouples(data[i-preamble:i])
             num=data[i]
+
             if num not in sumCouples:
                 return num
 
 def getSubsetSumsTo(l, num):
-    for i in range(len(l)):
-        summ=l[i]
-        nums=[l[i]]
-        for j in range(i+1, len(l)):
-            summ+=l[j]
-            nums.append(l[j])
-            if summ == num:
-                return nums
-            elif summ > num:
-                break
+    numsQueue=[]
+    summ=0
+    for x in l:
+        summ+=x
+        numsQueue.append(x)
 
-def partTwo(num=88311122):
+        while summ > num:
+            n=numsQueue.pop(0)
+            summ-=n
+
+        if summ == num:
+            return numsQueue
+        
+
+def partTwo(num):
     with open("input.txt", "r") as inputFile:
         data=[int (x) for x in inputFile.readlines()]
         subSet=getSubsetSumsTo(data, num)
-        return max(subSet)+min(subSet)
+        subSet=sorted(subSet)
+        return subSet[0]+subSet[-1]
 
+partOneAnswer=partOne()
 print("Answer for part 1: ")
-print(partOne())
+print(partOneAnswer)
 print("Answer for part 2: ")
-print(partTwo())
+print(partTwo(partOneAnswer))
