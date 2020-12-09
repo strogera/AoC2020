@@ -27,7 +27,7 @@ def getSubsetSumsTo(l, num):
         summ+=x
         numsQueue.append(x)
 
-        while summ > num:
+        while summ > num and len(numsQueue) > 2:
             n=numsQueue.pop(0)
             summ-=n
 
