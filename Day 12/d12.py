@@ -1,103 +1,50 @@
-import math
-
 class Ship:
-    xaxis=0
-    yaxis=0
-    direction=''
-    waypointxaxis=0
-    waypointyaxis=0
+    direction = 1
+    position = complex(0, 0)
+    waypointPosition = complex(0, 0)
+    moveOperation = {'E': 1, 'N':1j, 'W':-1, 'S':-1j}
+    rotationOperation = {'L': 1j, 'R': -1j}
 
     def __init__(self, direction, shipxaxis=0, shipyaxis=0, waypointxaxis=0, waypointyaxis=0):
-        self.xaxis = shipxaxis
-        self.yaxis = shipyaxis
-        self.direction = direction
-        self.waypointxaxis = waypointxaxis
-        self.waypointyaxis = waypointyaxis
+        self.direction = self.moveOperation[direction]
+        self.poisition = complex(shipxaxis, shipyaxis)
+        self.waypointPosition = complex(waypointxaxis, waypointyaxis)
 
     def moveShipPart1(self, instruction, value):
-        if instruction == 'N':
-            self.yaxis+=value
-        elif instruction == 'S':
-            self.yaxis-=value
-        elif instruction == 'E':
-            self.xaxis+=value
-        elif instruction == 'W':
-            self.xaxis-=value
-        elif instruction == 'L':
-            self.rotateShip(value, 'Left')
-        elif instruction == 'R':
-            self.rotateShip(value, 'Right')
-        elif instruction == 'F':
-            if self.direction == 'E':
-                self.xaxis+=value
-            elif self.direction == 'N':
-                self.yaxis+=value
-            elif self.direction == 'W':
-                self.xaxis-=value
-            elif self.direction == 'S':
-                self.yaxis-=value
-
-    def rotateShip(self, value, rdirection='Right'):
-        if rdirection == 'Left':
-            value *= 3
-        value=value%360
-        for _ in range(math.floor(value/90)):
-            if self.direction == 'E':
-                self.direction = 'S'
-            elif self.direction == 'S':
-                self.direction = 'W'
-            elif self.direction == 'W':
-                self.direction = 'N'
-            elif self.direction == 'N':
-                self.direction = 'E'
+        #rotate the ship
+        self.direction *= self.rotationOperation.get(instruction, 1) ** (value//90)
+        #move the ship
+        if instruction == 'F':
+            self.position += self.direction * value
+        else:
+            self.position += self.moveOperation.get(instruction, 0) * value
 
     def moveShipPart2(self, instruction, value):
-        if instruction == 'N':
-            self.waypointyaxis+=value
-        elif instruction == 'S':
-            self.waypointyaxis-=value
-        elif instruction == 'E':
-            self.waypointxaxis+=value
-        elif instruction == 'W':
-            self.waypointxaxis-=value
-        elif instruction == 'L':
-            self.rotateWayPoint(value, 'Left')
-        elif instruction == 'R':
-            self.rotateWayPoint(value, 'Right')
-        elif instruction == 'F':
-                self.xaxis+=value*self.waypointxaxis
-                self.yaxis+=value*self.waypointyaxis
-    
-    def rotateWayPoint(self, value, rdirection='Right'):
-        value=value%360
-        for _ in range(math.floor(value/90)):
-            if rdirection == 'Right':
-                self.waypointyaxis, self.waypointxaxis = self.waypointxaxis, self.waypointyaxis
-                self.waypointyaxis=self.waypointyaxis*(-1)
-            elif rdirection == 'Left':
-                self.waypointyaxis, self.waypointxaxis = self.waypointxaxis, self.waypointyaxis
-                self.waypointxaxis=self.waypointxaxis*(-1)
+        #rotate the waypoint
+        self.waypointPosition *= self.rotationOperation.get(instruction, 1) ** (value//90)
+        if instruction == 'F':
+            #move the ship
+            self.position += self.waypointPosition * value
+        else:
+            #move the waypoint
+            self.waypointPosition += self.moveOperation.get(instruction, 0) * value
 
-    def getManhDistanceOfAxis(self):
-        return abs(self.xaxis) + abs(self.yaxis)
+    def getManhDistanceOfxyCoords(self):
+        return int(abs(self.position.real) + abs(self.position.imag))
 
 def partOne():
     with open("input.txt", "r") as inputFile:
         ship=Ship('E')
         for line in inputFile:
-            instruction=line[0]
-            value=int(line[1:])
-            ship.moveShipPart1(instruction, value)
-        return ship.getManhDistanceOfAxis()
+            ship.moveShipPart1(line[0], int(line[1:]))
+        return ship.getManhDistanceOfxyCoords()
 
 def partTwo():
     with open("input.txt", "r") as inputFile:
         ship=Ship('E', 0, 0, 10, 1)
         for line in inputFile:
-            instruction=line[0]
-            value=int(line[1:])
-            ship.moveShipPart2(instruction, value)
-        return ship.getManhDistanceOfAxis()
+            ship.moveShipPart2(line[0], int(line[1:]))
+        return ship.getManhDistanceOfxyCoords()
 
 print("Answer for part 1: ")
 print(partOne())
