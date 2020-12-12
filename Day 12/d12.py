@@ -40,6 +40,7 @@ class Ship:
     def rotateShip(self, value, rdirection='Right'):
         if rdirection == 'Left':
             value *= 3
+        value=value%360
         for _ in range(math.floor(value/90)):
             if self.direction == 'E':
                 self.direction = 'S'
@@ -68,13 +69,14 @@ class Ship:
                 self.yaxis+=value*self.waypointyaxis
     
     def rotateWayPoint(self, value, rdirection='Right'):
-            for _ in range(math.floor(value/90)):
-                if rdirection == 'Right':
-                    self.waypointyaxis, self.waypointxaxis = self.waypointxaxis, self.waypointyaxis
-                    self.waypointyaxis=self.waypointyaxis*(-1)
-                elif rdirection == 'Left':
-                    self.waypointyaxis, self.waypointxaxis = self.waypointxaxis, self.waypointyaxis
-                    self.waypointxaxis=self.waypointxaxis*(-1)
+        value=value%360
+        for _ in range(math.floor(value/90)):
+            if rdirection == 'Right':
+                self.waypointyaxis, self.waypointxaxis = self.waypointxaxis, self.waypointyaxis
+                self.waypointyaxis=self.waypointyaxis*(-1)
+            elif rdirection == 'Left':
+                self.waypointyaxis, self.waypointxaxis = self.waypointxaxis, self.waypointyaxis
+                self.waypointxaxis=self.waypointxaxis*(-1)
 
     def getManhDistanceOfAxis(self):
         return abs(self.xaxis) + abs(self.yaxis)
